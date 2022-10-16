@@ -1,5 +1,6 @@
 song = "";
 scoreLeftWrist = 0;
+scoreRightWrist = 0;
 
 rightWristX = 0;
 rightWristY = 0;
@@ -28,7 +29,7 @@ function setup()
 
 function modelLoaded()
 {
-    console.log("PoseNet is Initialized")
+    console.log("PoseNet is Initialized");
 }
 
 function draw()
@@ -68,20 +69,24 @@ function draw()
         document.getElementById("speed").innerHTML = "Speed = 2.5x";
         song.rate(2.5);
     }
+
+    
+}
+if(scoreRightWrist > 0.2){
+circle(leftWristX, leftWristY,20);
+      InNumberleftWristY = Number(leftWristY);
+      remove_decimals = floor(InNumberleftWristY);
+      volume = remove_decimals/500;
+      document.getElementById("volume").innerHTML = "Volume = " + volume;
+      song.setVolume(volume);}
 }
 
 
-    if(scoreLeftWrist > 0.2)
-    {
-        circle(leftWristX, leftWristY,20);
-        InNumberleftWristY = Number(leftWristY);
-        remove_decimals = floor(InNumberleftWristY);
-        volume = remove_decimals/500;
-        volume = leftWristY_divide_1000 *2 ;
-        document.getElementById("volume").innerHTML = "Volume = " + volume;
-        song.setVolume(volume); 
-    }
-}
+
+
+      
+
+
 
 function play(){
     song.play();
