@@ -1,114 +1,87 @@
-song = "";
-scoreLeftWrist = 0;
-scoreRightWrist = 0;
+inspire_song="";
+Harry_potter_theme_song="";
+rightWrist_x = 0;
+rightWrist_y = 0;
+leftWrist_x = 0;
+leftWrist_y = 0;
+scoreleftWrist = 0;
+scorerightWrist = 0;
+song_Inspire = "";
+song_Harry_potter_theme = "";
 
-rightWristX = 0;
-rightWristY = 0;
-
-leftWristX = 0;
-leftWristY = 0;
-
-
-
-function preload()
-{
-    song = loadSound("music.mp3");
-}   
-
-function setup()
-{
-    canvas = createCanvas(600, 500);
-    canvas.center(); 
+function setup(){
+    canvas = createCanvas(600,530);
+    canvas.center();
 
     video = createCapture(VIDEO);
     video.hide();
 
-    poseNet = ml5.poseNet(video, modelLoaded);
-    poseNet.on('pose', gotPoses);
+    poseNet = ml5.poseNet(video,modelLoaded);
+    poseNet.on('pose',gotposes);
 }
 
-function modelLoaded()
-{
-    console.log("PoseNet is Initialized");
+function preload(){
+    inspire_song = loadSound("in.mp3");
+    Harry_potter_theme_song = loadSound("hp.mp3");
 }
 
-function draw()
-{
-    image(video, 0, 0, 600, 500);
+function draw(){
+    image(video,0,0,600,530);
 
-    fill("#FF0000");
-    stroke("#FF0000");
+    fill("#00ff00");
+    stroke("#ff0000");
 
-    if(scoreRightWrist > 0.2)
-{
+    song_Inspire = inspire_song.isPlaying();
+    console.log(song_Inspire);
 
-    circle(rightWristX, rightWristY,20);
+    song_Harry_potter_theme = Harry_potter_theme_song.isPlaying();
+    console.log(song_Harry_potter_theme);
 
-    if(rightWristY>0 && rightWristY<=100)
-    {
-        document.getElementById("speed").innerHTML = "Speed = 0.5x";
-        song.rate(0.5);
-    }
-    else if (rightWristY>100 && rightWristY<=200)
-    {
-        document.getElementById("speed").innerHTML = "Speed = 1x";
-        song.rate(1);
-    }
-    else if (rightWristY>200 && rightWristY<=300)
-    {
-        document.getElementById("speed").innerHTML = "Speed = 1.5x";
-        song.rate(1.5);
-    }
-    else if (rightWristY>300 && rightWristY<=400)
-    {
-        document.getElementById("speed").innerHTML = "Speed = 2x";
-        song.rate(2);
-    }
-    else if (rightWristY>400 && rightWristY<=500)
-    {
-        document.getElementById("speed").innerHTML = "Speed = 2.5x";
-        song.rate(2.5);
+    if(scoreleftWrist > 0.2){
+        circle(leftWrist_x,leftWrist_y,20);
+        Harry_potter_theme_song.stop();
+        if(song_Inspire == false){
+            inspire_song.play();
+        }
+        else{
+            console.log("Song Name: Inspire Song");
+            document.getElementById("song_id").innerHTML = "Song Name: Inspire Song";
+        }
     }
 
-    
-}
-if(scoreRightWrist > 0.2){
-circle(leftWristX, leftWristY,20);
-      InNumberleftWristY = Number(leftWristY);
-      remove_decimals = floor(InNumberleftWristY);
-      volume = remove_decimals/500;
-      document.getElementById("volume").innerHTML = "Volume = " + volume;
-      song.setVolume(volume);}
+    if(scorerightWrist > 0.2){
+        circle(rightWrist_x,rightWrist_y,20);
+        inspire_song.stop();
+        if(song_Harry_potter_theme == false){
+            Harry_potter_theme_song.play();
+        }
+        else{
+            console.log("Song Name: Harry Potter Theme Song");
+            document.getElementById("song_id").innerHTML = "Song Name: Harry Potter Theme Song";
+        }
+    }
 }
 
-
-
-
-      
-
-
-
-function play(){
-    song.play();
-    song.setVolume(1);
-    song.rate(1);
+function modelLoaded(){
+    console.log("poseNet Is Initialized");
 }
 
-function gotPoses(results)
-{
-    if(results.length > 0)
-    {
+function gotposes(results){
+    if(results.length > 0){
         console.log(results);
-        scoreRightWrist = results[0].pose.keypoints[10].score;
-        scoreLeftWrist = results[0].pose.keypoints[9].score;
-        console.log("scoreRightWrist = "+ scoreRightWrist + "scoreLeftWrist = "+ scoreLeftWrist);
 
-        rightWristX = results[0].pose.rightWrist.x;
-        rightWristY = results[0].pose.rightWrist.y;
-        console.log("RightWristX = " + rightWristX + "RightWristY = " + rightWristY);
+        scoreleftWrist = results[0].pose.keypoints[9].score;
+        console.log(scoreleftWrist);
 
-        leftWristX = results[0].pose.leftWrist.x;
-        leftWristY = results[0].pose.leftWrist.y;
-        console.log("LeftWristX = " + leftWristX + "LeftWristY = " + leftWristY);
+        scorerightWrist = results[0].pose.keypoints[10].score;
+        console.log(scorerightWrist);
+
+        leftWrist_x = results[0].pose.leftWrist.x;
+        leftWrist_y = results[0].pose.leftWrist.y;
+        console.log("leftWrist_x = "+leftWrist_x+" leftWrist_y = "+leftWrist_y);
+
+        rightWrist_x = results[0].pose.rightWrist.x;
+        rightWrist_y = results[0].pose.rightWrist.y;
+        console.log("rightWrist_x = "+rightWrist_x+" rightWrist_y = "+rightWrist_y);
     }
 }
